@@ -9,11 +9,13 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.Session;
 import model.Task;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class Subtask {
     Stage stage;
@@ -30,14 +32,18 @@ public class Subtask {
     @FXML
     private DatePicker deadline;
     @FXML
-    private ComboBox task;
+    private ComboBox<String> task;
     @FXML
     private Label result;
+    @FXML
+    private Label error;
 
     public void initialize(){
         result.setOpacity(0);
-        task = new ComboBox<Task>(FXCollections.observableArrayList(Session.getSession().allTasks));
-        System.out.println(task.getItems().toString());
+        error.setOpacity(0);
+        for (int i=0;i<Session.getSession().allTasks.size();i++){
+            task.getItems().add(Session.getSession().allTasks.get(i).toString());
+        }
     }
 
     public void setBack(ActionEvent event) throws IOException {
@@ -49,8 +55,25 @@ public class Subtask {
         stage.show();
     }
     public void setAdd(ActionEvent event){
+        Task parent = null;
         result.setDisable(true);
         result.setOpacity(0);
-        //if (model.Subtask.addSubtask(name.getText(),description.getText(),deadline.getValue(),task.getValue()))
+        String pname=task.getValue();
+        for (int i=0;i<Session.getSession().allTasks.size();i++){
+            if (Objects.equals(pname, Session.getSession().allTasks.get(i).toString())){
+                parent=Session.getSession().allTasks.get(i);
+                break;
+            }
+        }
+
+        if (model.Subtask.addSubtask(name.getText(),description.getText(),deadline.getValue(),parent)){
+            error.setOpacity(0);
+            result.setText("succesful");
+            result.setOpacity(0.45);
+        }else {
+            result.setOpacity(0);
+            error.setText("error! dates didnt match!");
+            error.setOpacity(0.45);
+        }
     }
 }
