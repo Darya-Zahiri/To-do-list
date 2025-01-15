@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="936.0" prefWidth="1284.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.Welcome">
+   <children>
+      <Label layoutX="586.0" layoutY="340.0" text="welcome to" textFill="WHITE">
+         <font>
+            <Font name="XM Traffic" size="22.0" />
+         </font>
+      </Label>
+      <Label layoutX="541.0" layoutY="391.0" text="To do list" textFill="WHITE">
+         <font>
+            <Font name="XM Vahid Bold" size="50.0" />
+         </font>
+      </Label>
+      <Button fx:id="start" layoutX="602.0" layoutY="555.0" mnemonicParsing="false" onAction="#setStart" text="start">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
