@@ -27,5 +27,7 @@ public class Task {
     public String toString(){
         return this.name;
     }
-
+    public Subtask getChild(){
+        return child;
+    }
 }

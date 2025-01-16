@@ -42,4 +42,7 @@ public class Subtask extends Task{
             deleteTask(parent);
         }
     }
+    public Subtask getSibling(){
+        return this.sibling;
+    }
 }
