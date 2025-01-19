@@ -16,17 +16,17 @@
             <Font size="22.0" />
          </font>
       </Button>
-      <Button layoutX="40.0" layoutY="831.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="71.0" style="-fx-background-color: green;" text="Done">
+      <Button fx:id="done" layoutX="40.0" layoutY="831.0" mnemonicParsing="false" onAction="#setDone" prefHeight="45.0" prefWidth="71.0" style="-fx-background-color: green;" text="Done">
          <font>
             <Font size="17.0" />
          </font>
       </Button>
-      <Button layoutX="129.0" layoutY="831.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="71.0" style="-fx-background-color: yellow;" text="Edit">
+      <Button fx:id="edit" layoutX="129.0" layoutY="831.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="71.0" style="-fx-background-color: yellow;" text="Edit">
          <font>
             <Font size="19.0" />
          </font>
       </Button>
-      <Button layoutX="220.0" layoutY="831.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="71.0" style="-fx-background-color: white;" text="Show">
+      <Button fx:id="view" layoutX="220.0" layoutY="831.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="71.0" style="-fx-background-color: white;" text="view">
          <font>
             <Font size="18.0" />
          </font>

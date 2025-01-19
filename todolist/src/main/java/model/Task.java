@@ -1,5 +1,8 @@
 package model;
 
+import javafx.scene.control.CheckBoxTreeItem;
+import javafx.scene.control.TreeView;
+
 import java.time.LocalDate;
 
 public class Task {
@@ -7,7 +10,9 @@ public class Task {
     String description;
     LocalDate date;
     Subtask child;
-    //deadline
+    CheckBoxTreeItem<String> checkBox;
+    TreeView<String> tree;
+
     boolean status;
     //true=to do
     //false=done
@@ -16,6 +21,8 @@ public class Task {
         this.description=description;
         this.date=date;
         status=true;
+        checkBox=new CheckBoxTreeItem<>(this.name);
+        tree=new TreeView<>(checkBox);
     }
     public static void addTask(String name,String description,LocalDate date){
         Task newtask=new Task(name,description,date);
@@ -29,5 +36,11 @@ public class Task {
     }
     public Subtask getChild(){
         return child;
+    }
+    public CheckBoxTreeItem<String> getCheckBox(){
+        return checkBox;
+    }
+    public TreeView<String> getTree(){
+        return tree;
     }
 }
