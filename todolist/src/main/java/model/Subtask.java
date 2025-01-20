@@ -4,7 +4,8 @@ import java.time.LocalDate;
 
 public class Subtask extends Task{
     Task parent;
-    Subtask sibling;
+    Subtask rightSibling;
+    Subtask leftSibling;
     public Subtask(String name, String description, LocalDate date, Task parent) {
         super(name, description,date);
         this.parent=parent;
@@ -17,10 +18,11 @@ public class Subtask extends Task{
                 parent.child=newsubtask;
             }else {
                 Subtask temp= parent.child;
-                while (temp.sibling != null){
-                    temp=temp.sibling;
+                while (temp.rightSibling != null){
+                    temp=temp.rightSibling;
                 }
-                temp.sibling=newsubtask;
+                temp.rightSibling=newsubtask;
+                newsubtask.leftSibling=temp;
             }
             return true;
         }else {
@@ -28,21 +30,19 @@ public class Subtask extends Task{
         }
     }
     public void deleteSubtask(){
-        boolean delete=true;
-        status=false;
-        Subtask temp= parent.child;
-        while (temp!=null){
-            if (temp.status==true){
-                delete=false;
-                break;
-            }
-            temp=temp.sibling;
+        if (this==this.parent.child){
+            this.parent.child=this.rightSibling;
         }
-        if (delete){
-            deleteTask(parent);
+
+        if (this.leftSibling!=null){
+            this.leftSibling.rightSibling=this.rightSibling;
+        }
+        if (this.rightSibling!=null){
+
+            this.rightSibling.leftSibling=this.leftSibling;
         }
     }
-    public Subtask getSibling(){
-        return this.sibling;
+    public Subtask getRightSibling(){
+        return this.rightSibling;
     }
 }

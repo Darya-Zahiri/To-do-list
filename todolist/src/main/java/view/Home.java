@@ -14,6 +14,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import model.Session;
 import model.Subtask;
+import model.Task;
 
 import java.io.IOException;
 
@@ -51,11 +52,11 @@ public class Home {
                         //final CheckBoxTreeItem<String> checkBoxTreeItem = new CheckBoxTreeItem<String>(child.toString());
                         //rootItem.getChildren().add(checkBoxTreeItem);
 
-                        child=child.getSibling();
+                        child=child.getRightSibling();
                     }
                     anchor.getChildren().add(tree);
                     //tree.setPrefWidth(800);
-                    tree.setLayoutX(20+200*i);
+                    tree.setLayoutX(20+300*i);
                     //tree.setLayoutY(10+100*i);
                 }
             }
@@ -78,10 +79,23 @@ public class Home {
         stage.show();
     }
     public void setDone(ActionEvent event){
-        //first tasks;
-        for (int i=0;i<Session.getSession().allTasks.size();i++){
-            if (Session.getSession().allTasks.get(i).getCheckBox().isSelected()){
-                Session.getSession().allTasks.remove(i);
+        if (Session.getSession().allTasks.size()!=0){
+            int i=0;
+            while (i<Session.getSession().allTasks.size()){
+                Subtask child=Session.getSession().allTasks.get(i).getChild();
+                while (child!=null){
+                    if(child.getCheckBox().isSelected()){
+                        Session.getSession().allTasks.get(i).getTree().getChildrenUnmodifiable().remove(child.getCheckBox());
+                        child.deleteSubtask();
+                    }
+                    child=child.getRightSibling();
+                }
+                if (Session.getSession().allTasks.get(i).getCheckBox().isSelected()){
+                    Session.getSession().allTasks.get(i).getTree().setOpacity(0);
+                    Task.deleteTask(Session.getSession().allTasks.get(i));
+                }
+
+                i++;
             }
         }
     }

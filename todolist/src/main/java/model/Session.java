@@ -6,6 +6,7 @@ public class Session {
     public static Session session;
     public ArrayList<Task> allTasks=new ArrayList<>();
     public Task currentTask;
+    public Subtask currentSubtask;
     private Session(){
 
     }
@@ -17,5 +18,8 @@ public class Session {
     }
     public Task getCurrentTask(){
         return currentTask;
+    }
+    public Subtask getCurrentSubtask(){
+        return currentSubtask;
     }
 }
