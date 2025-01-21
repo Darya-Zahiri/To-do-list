@@ -43,4 +43,21 @@ public class Task {
     public TreeView<String> getTree(){
         return tree;
     }
+    public String getDescription(){
+        return description;
+    }
+    public String getDate(){
+        return date.toString();
+    }
+    public void setName(String name){
+        this.name=name;
+        checkBox=new CheckBoxTreeItem<>(name);
+        tree=new TreeView<>(checkBox);
+    }
+    public void setDescription(String description){
+        this.description=description;
+    }
+    public void setDate(LocalDate date){
+        this.date=date;
+    }
 }

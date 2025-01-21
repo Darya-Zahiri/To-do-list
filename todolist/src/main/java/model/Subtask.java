@@ -45,4 +45,29 @@ public class Subtask extends Task{
     public Subtask getRightSibling(){
         return this.rightSibling;
     }
+    public Task getParent(){
+        return parent;
+    }
+    public boolean setParent(Task parent){
+        if (date.isBefore(parent.date)){
+            this.deleteSubtask();
+            this.parent=parent;
+            if (parent.child!=null){
+                Subtask temp= parent.child;
+                while (temp.rightSibling != null){
+                    temp=temp.rightSibling;
+                }
+                temp.rightSibling=this;
+                this.leftSibling=temp;
+                this.rightSibling=null;
+            } else {
+                parent.child=this;
+                this.rightSibling=null;
+                this.leftSibling=null;
+            }
+            return true;
+        }else {
+            return false;
+        }
+    }
 }

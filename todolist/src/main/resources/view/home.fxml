@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
@@ -21,15 +22,16 @@
             <Font size="17.0" />
          </font>
       </Button>
-      <Button fx:id="edit" layoutX="129.0" layoutY="831.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="71.0" style="-fx-background-color: yellow;" text="Edit">
+      <Button fx:id="edit" layoutX="129.0" layoutY="831.0" mnemonicParsing="false" onAction="#setEdit" prefHeight="45.0" prefWidth="71.0" style="-fx-background-color: yellow;" text="Edit">
          <font>
             <Font size="19.0" />
          </font>
       </Button>
-      <Button fx:id="view" layoutX="220.0" layoutY="831.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="71.0" style="-fx-background-color: white;" text="view">
+      <Button fx:id="view" layoutX="220.0" layoutY="831.0" mnemonicParsing="false" onAction="#setView" prefHeight="45.0" prefWidth="71.0" style="-fx-background-color: white;" text="view">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
+      <TextArea fx:id="show" layoutX="777.0" layoutY="660.0" prefHeight="216.0" prefWidth="424.0" />
    </children>
 </AnchorPane>

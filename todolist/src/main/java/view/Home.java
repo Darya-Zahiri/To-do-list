@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBoxTreeItem;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.CheckBoxTreeCell;
 import javafx.scene.layout.AnchorPane;
@@ -34,6 +35,8 @@ public class Home {
     private Button edit;
     @FXML
     private AnchorPane anchor;
+    @FXML
+    private TextArea show;
     public void initialize(){
         //for (int j=0;j< Session.getSession().allTasks.size();j++){
             if (Session.getSession().allTasks.size()>0){
@@ -96,6 +99,65 @@ public class Home {
                 }
 
                 i++;
+            }
+        }
+
+    }
+
+    public void setView(ActionEvent event) {
+        String output = "";
+        if (Session.getSession().allTasks.size() != 0) {
+            for (int i = 0; i < Session.getSession().allTasks.size(); i++) {
+
+                if (Session.getSession().allTasks.get(i).getCheckBox().isSelected()) {
+                    Task temp = Session.getSession().allTasks.get(i);
+                    output += "kind : Task " +"\n"+ "name : " + temp.toString() +"\n"+ "description : " + temp.getDescription() +
+                            "\n"+ "deadline : " + temp.getDate()+"\n";
+                    break;
+                }
+
+                Subtask child = Session.getSession().allTasks.get(i).getChild();
+                while (child != null) {
+                    if (child.getCheckBox().isSelected()) {
+                        output += "kind : SubTask " +"\n"+ "name : " + child.toString() +"\n"+ "description : " + child.getDescription() +
+                                "\n"+"deadline : " + child.getDate() +"\n"+ "Task : " + child.getParent().toString()+"\n";
+                    }
+                    child = child.getRightSibling();
+                }
+            }
+        }
+        show.setText(output);
+    }
+
+    public void setEdit(ActionEvent event) throws IOException {
+        if (Session.getSession().allTasks.size() != 0) {
+            for (int i = 0; i < Session.getSession().allTasks.size(); i++) {
+
+                if (Session.getSession().allTasks.get(i).getCheckBox().isSelected()) {
+                    Session.getSession().currentTask=Session.getSession().allTasks.get(i);
+                    Session.getSession().currentSubtask=null;
+                    root = FXMLLoader.load(getClass().getResource("task.fxml"));
+                    stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.show();
+                    break;
+                }
+
+                Subtask child = Session.getSession().allTasks.get(i).getChild();
+                while (child != null) {
+                    if (child.getCheckBox().isSelected()) {
+                        Session.getSession().currentSubtask=child;
+                        Session.getSession().currentTask=null;
+                        root = FXMLLoader.load(getClass().getResource("subtask.fxml"));
+                        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                        scene = new Scene(root);
+                        stage.setScene(scene);
+                        stage.show();
+                        break;
+                    }
+                    child = child.getRightSibling();
+                }
             }
         }
     }

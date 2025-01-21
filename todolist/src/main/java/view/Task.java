@@ -42,7 +42,14 @@ public class Task {
     public void setAdd(ActionEvent event){
         result.setDisable(true);
         result.setOpacity(0);
-        model.Task.addTask(name.getText(),description.getText(),deadline.getValue());
+        if (Session.getSession().currentTask==null){
+            model.Task.addTask(name.getText(),description.getText(),deadline.getValue());
+        }else {
+            Session.getSession().currentTask.setName(name.getText());
+            Session.getSession().currentTask.setDescription(description.getText());
+            Session.getSession().currentTask.setDate(deadline.getValue());
+            Session.getSession().currentTask=null;
+        }
         result.setText("successful");
         result.setDisable(false);
         result.setOpacity(0.45);

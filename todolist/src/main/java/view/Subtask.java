@@ -65,15 +65,34 @@ public class Subtask {
                 break;
             }
         }
-
-        if (model.Subtask.addSubtask(name.getText(),description.getText(),deadline.getValue(),parent)){
-            error.setOpacity(0);
-            result.setText("succesful");
-            result.setOpacity(0.45);
+        if (Session.getSession().currentSubtask==null){
+            if (model.Subtask.addSubtask(name.getText(),description.getText(),deadline.getValue(),parent)){
+                error.setOpacity(0);
+                result.setText("succesful");
+                result.setOpacity(0.45);
+            }else {
+                result.setOpacity(0);
+                error.setText("error! dates didnt match!");
+                error.setOpacity(0.45);
+            }
         }else {
-            result.setOpacity(0);
-            error.setText("error! dates didnt match!");
-            error.setOpacity(0.45);
+
+            if (Session.getSession().currentSubtask.setParent(parent)){
+                Session.getSession().currentSubtask.setName(name.getText());
+                Session.getSession().currentSubtask.setDescription(description.getText());
+                Session.getSession().currentSubtask.setDate(deadline.getValue());
+                error.setOpacity(0);
+                result.setText("succesful");
+                result.setOpacity(0.45);
+                Session.getSession().currentSubtask=null;
+            }else {
+                Session.getSession().currentSubtask=null;
+                result.setOpacity(0);
+                error.setText("error! dates didnt match!");
+                error.setOpacity(0.45);
+            }
         }
+
+
     }
 }
