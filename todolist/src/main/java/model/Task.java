@@ -4,6 +4,7 @@ import javafx.scene.control.CheckBoxTreeItem;
 import javafx.scene.control.TreeView;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 
 public class Task {
     String name;
@@ -27,6 +28,10 @@ public class Task {
     public static void addTask(String name,String description,LocalDate date){
         Task newtask=new Task(name,description,date);
         Session.getSession().allTasks.add(newtask);
+        Session.getSession().allTasks.sort(Comparator.comparing(Task::getDate));
+        for (int i=0;i<Session.getSession().allTasks.size();i++){
+            System.out.println(Session.getSession().allTasks.get(i).toString());
+        }
     }
     public static void deleteTask(Task task){
         Session.getSession().allTasks.remove(task);
