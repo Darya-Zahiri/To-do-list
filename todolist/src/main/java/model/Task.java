@@ -3,6 +3,7 @@ package model;
 import javafx.scene.control.CheckBoxTreeItem;
 import javafx.scene.control.TreeView;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Comparator;
 
@@ -14,22 +15,30 @@ public class Task {
     CheckBoxTreeItem<String> checkBox;
     TreeView<String> tree;
     int id;
+    static int maxid=-1;
 
     boolean status;
     //true=to do
     //false=done
-    public Task(String name,String description,LocalDate date){
+    public Task(String name,String description,LocalDate date,int id){
         this.name=name;
         this.description=description;
         this.date=date;
+        this.id=id;
         status=true;
         checkBox=new CheckBoxTreeItem<>(this.name);
         tree=new TreeView<>(checkBox);
     }
     public static void addTask(String name,String description,LocalDate date){
-        Task newtask=new Task(name,description,date);
-        Session.getSession().allTasks.add(newtask);
-        Session.getSession().allTasks.sort(Comparator.comparing(Task::getDate));
+        try {
+            maxid++;
+            Task newtask=new Task(name,description,date,maxid);
+            Session.database.executeQueryWithoutResult("insert into task (id,name,description,date) values ("+maxid+",'"+name+"','"+description+"','"+date.toString()+"');");
+            Session.getSession().allTasks.add(newtask);
+            Session.getSession().allTasks.sort(Comparator.comparing(Task::getDate));
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        }
         for (int i=0;i<Session.getSession().allTasks.size();i++){
             System.out.println(Session.getSession().allTasks.get(i).toString());
         }
