@@ -18,6 +18,9 @@ import model.Subtask;
 import model.Task;
 
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
 
 public class Home {
     Stage stage;
@@ -39,30 +42,69 @@ public class Home {
     private TextArea show;
     public void initialize(){
         //for (int j=0;j< Session.getSession().allTasks.size();j++){
-            if (Session.getSession().allTasks.size()>0){
-                for(int i=0;i<Session.getSession().allTasks.size();i++){
-                    CheckBoxTreeItem<String> rootItem =  Session.getSession().allTasks.get(i).getCheckBox();
-                    rootItem.setExpanded(true);
-                    //rootItem.setExpanded(true);
-                    TreeView<String> tree = Session.getSession().allTasks.get(i).getTree();
-                    tree.setEditable(true);
+            if (Session.getSession().allTasks.size()==0){
+                ResultSet taskResultset;
+                ResultSet subtaskResultset;
+                try {
+                    //Session.database.getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, "theSql");
+                    taskResultset=Session.database.executeQueryWithResult("select * from task;");
+                    if(taskResultset!=null){
+                        //taskResultset.beforeFirst();
+                        while (taskResultset.next()){
+                            String taskname,description,taskdate;
+                            LocalDate date;
+                            int taskid;
+                            taskid=taskResultset.getInt("id");
+                            description=taskResultset.getString("description");
+                            taskname=taskResultset.getString("name");
+                            taskdate=taskResultset.getString("date");
+                            date=LocalDate.parse(taskdate);
+                            Task task=new Task(taskname,description,date,taskid);
 
-                    tree.setCellFactory(CheckBoxTreeCell.<String>forTreeView());
-                    rootItem.getChildren().clear();
-                    Subtask child=Session.getSession().allTasks.get(i).getChild();
-                    while (child != null) {
-                        rootItem.getChildren().add(child.getCheckBox());
-                        //final CheckBoxTreeItem<String> checkBoxTreeItem = new CheckBoxTreeItem<String>(child.toString());
-                        //rootItem.getChildren().add(checkBoxTreeItem);
 
-                        child=child.getRightSibling();
+                            int subtaskid;
+                            subtaskResultset=Session.database.executeQueryWithResult("select * from subtask where idtask="+taskid+";");
+                            while (subtaskResultset.next()){
+                                subtaskid=subtaskResultset.getInt("id");
+                                description=subtaskResultset.getString("description");
+                                taskname=subtaskResultset.getString("name");
+                                taskdate=subtaskResultset.getString("date");
+                                date=LocalDate.parse(taskdate);
+                                Subtask.addSubtask(taskname,description,date,task);
+                            }
+
+
+                            Session.getSession().allTasks.add(task);
+                        }
+                    }else {
+                        System.out.println("error");
                     }
-                    anchor.getChildren().add(tree);
-                    //tree.setPrefWidth(800);
-                    tree.setLayoutX(20+300*i);
-                    //tree.setLayoutY(10+100*i);
+                } catch (SQLException e) {
+                    System.out.println(e.toString());
                 }
             }
+        for(int i=0;i<Session.getSession().allTasks.size();i++){
+            CheckBoxTreeItem<String> rootItem =  Session.getSession().allTasks.get(i).getCheckBox();
+            rootItem.setExpanded(true);
+            //rootItem.setExpanded(true);
+            TreeView<String> tree = Session.getSession().allTasks.get(i).getTree();
+            tree.setEditable(true);
+
+            tree.setCellFactory(CheckBoxTreeCell.<String>forTreeView());
+            rootItem.getChildren().clear();
+            Subtask child=Session.getSession().allTasks.get(i).getChild();
+            while (child != null) {
+                rootItem.getChildren().add(child.getCheckBox());
+                //final CheckBoxTreeItem<String> checkBoxTreeItem = new CheckBoxTreeItem<String>(child.toString());
+                //rootItem.getChildren().add(checkBoxTreeItem);
+
+                child=child.getRightSibling();
+            }
+            anchor.getChildren().add(tree);
+            //tree.setPrefWidth(800);
+            tree.setLayoutX(20+300*i);
+            //tree.setLayoutY(10+100*i);
+        }
         //}
 
     }
