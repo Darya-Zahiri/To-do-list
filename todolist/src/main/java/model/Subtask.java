@@ -7,18 +7,20 @@ public class Subtask extends Task{
     Task parent;
     Subtask rightSibling;
     Subtask leftSibling;
-    static int maxidsub=-1;
+    public static int maxidsub;
     public Subtask(String name, String description, LocalDate date,int id, Task parent) {
         super(name, description,date,id);
         this.parent=parent;
 
     }
-    public static boolean addSubtask(String name,String description,LocalDate date,Task parent){
+    public static boolean addSubtask(String name,String description,LocalDate date,Task parent,int mode){
 
         if (date.isBefore(parent.date)){
             try {
                 maxidsub++;
-                Session.database.executeQueryWithoutResult("insert into subtask (id,name,description,date,idtask) values ("+maxidsub+",'"+name+"','"+description+"','"+date.toString()+"',"+parent.id+");");
+                if(mode==0){
+                    Session.database.executeQueryWithoutResult("insert into subtask (id,name,description,date,idtask) values ("+maxidsub+",'"+name+"','"+description+"','"+date.toString()+"',"+parent.id+");");
+                }
                 Subtask newsubtask=new Subtask(name,description,date,maxidsub,parent);
                 if (parent.child == null){
                     parent.child=newsubtask;
@@ -40,16 +42,21 @@ public class Subtask extends Task{
         }
     }
     public void deleteSubtask(){
-        if (this==this.parent.child){
-            this.parent.child=this.rightSibling;
-        }
+        try {
+            Session.database.executeQueryWithoutResult("delete from subtask where id="+this.id+";");
+            if (this == this.parent.child) {
+                this.parent.child = this.rightSibling;
+            }
 
-        if (this.leftSibling!=null){
-            this.leftSibling.rightSibling=this.rightSibling;
-        }
-        if (this.rightSibling!=null){
+            if (this.leftSibling != null) {
+                this.leftSibling.rightSibling = this.rightSibling;
+            }
+            if (this.rightSibling != null) {
 
-            this.rightSibling.leftSibling=this.leftSibling;
+                this.rightSibling.leftSibling = this.leftSibling;
+            }
+        }catch (SQLException e){
+
         }
     }
     public Subtask getRightSibling(){

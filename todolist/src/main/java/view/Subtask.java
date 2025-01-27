@@ -15,6 +15,7 @@ import model.Session;
 import model.Task;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Objects;
 
 public class Subtask {
@@ -66,7 +67,7 @@ public class Subtask {
             }
         }
         if (Session.getSession().currentSubtask==null){
-            if (model.Subtask.addSubtask(name.getText(),description.getText(),deadline.getValue(),parent)){
+            if (model.Subtask.addSubtask(name.getText(),description.getText(),deadline.getValue(),parent,0)){
                 error.setOpacity(0);
                 result.setText("succesful");
                 result.setOpacity(0.45);
@@ -78,13 +79,20 @@ public class Subtask {
         }else {
 
             if (Session.getSession().currentSubtask.setParent(parent)){
-                Session.getSession().currentSubtask.setName(name.getText());
-                Session.getSession().currentSubtask.setDescription(description.getText());
-                Session.getSession().currentSubtask.setDate(deadline.getValue());
-                error.setOpacity(0);
-                result.setText("succesful");
-                result.setOpacity(0.45);
-                Session.getSession().currentSubtask=null;
+                try {
+                    System.out.println("edit ok id="+Session.getSession().currentSubtask.getId());
+                    Session.database.executeQueryWithoutResult("update subtask set name='"+name.getText()+"', description='"+description.getText()+"' , date='"+deadline.getValue().toString()+"', idtask="+parent.getId()+" where id="+Session.getSession().currentSubtask.getId()+";");
+
+                    Session.getSession().currentSubtask.setName(name.getText());
+                    Session.getSession().currentSubtask.setDescription(description.getText());
+                    Session.getSession().currentSubtask.setDate(deadline.getValue());
+                    error.setOpacity(0);
+                    result.setText("succesful");
+                    result.setOpacity(0.45);
+                    Session.getSession().currentSubtask=null;
+                } catch (SQLException e) {
+                    System.out.println(e.toString());
+                }
             }else {
                 Session.getSession().currentSubtask=null;
                 result.setOpacity(0);

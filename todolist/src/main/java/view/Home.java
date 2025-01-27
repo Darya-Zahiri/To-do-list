@@ -46,7 +46,17 @@ public class Home {
                 ResultSet taskResultset;
                 ResultSet subtaskResultset;
                 try {
-                    //Session.database.getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, "theSql");
+                    taskResultset=Session.database.executeQueryWithResult("select max(id) from task;");
+                    if(taskResultset.next())
+                        Task.maxid=taskResultset.getInt("max(id)");
+                    else
+                        Task.maxid=-1;
+                    System.out.println("maxid="+Task.maxid);
+                    taskResultset=Session.database.executeQueryWithResult("select max(id) from subtask;");
+                    if(taskResultset.next())
+                        Subtask.maxidsub=taskResultset.getInt("max(id)");
+                    else
+                        Subtask.maxidsub=-1;
                     taskResultset=Session.database.executeQueryWithResult("select * from task;");
                     if(taskResultset!=null){
                         //taskResultset.beforeFirst();
@@ -61,7 +71,6 @@ public class Home {
                             date=LocalDate.parse(taskdate);
                             Task task=new Task(taskname,description,date,taskid);
 
-
                             int subtaskid;
                             subtaskResultset=Session.database.executeQueryWithResult("select * from subtask where idtask="+taskid+";");
                             while (subtaskResultset.next()){
@@ -70,10 +79,8 @@ public class Home {
                                 taskname=subtaskResultset.getString("name");
                                 taskdate=subtaskResultset.getString("date");
                                 date=LocalDate.parse(taskdate);
-                                Subtask.addSubtask(taskname,description,date,task);
+                                Subtask.addSubtask(taskname,description,date,task,1);
                             }
-
-
                             Session.getSession().allTasks.add(task);
                         }
                     }else {

@@ -15,7 +15,7 @@ public class Task {
     CheckBoxTreeItem<String> checkBox;
     TreeView<String> tree;
     int id;
-    static int maxid=-1;
+    public static int maxid;
 
     boolean status;
     //true=to do
@@ -44,7 +44,14 @@ public class Task {
         }
     }
     public static void deleteTask(Task task){
-        Session.getSession().allTasks.remove(task);
+        try {
+            Session.database.executeQueryWithoutResult("delete from subtask where idtask="+task.id+";");
+
+            Session.database.executeQueryWithoutResult("delete from task where id="+task.id+";");
+            Session.getSession().allTasks.remove(task);
+        }catch (SQLException e){
+
+        }
     }
     public String toString(){
         return this.name;
