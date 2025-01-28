@@ -13,15 +13,20 @@ public class Subtask extends Task{
         this.parent=parent;
 
     }
-    public static boolean addSubtask(String name,String description,LocalDate date,Task parent,int mode){
+    public static boolean addSubtask(String name,String description,LocalDate date,Task parent,int id,int mode){
 
         if (date.isBefore(parent.date)){
             try {
-                maxidsub++;
-                if(mode==0){
+
+                Subtask newsubtask;
+                if(mode==0){//mode=0 add else edit
+                    maxidsub++;
                     Session.database.executeQueryWithoutResult("insert into subtask (id,name,description,date,idtask) values ("+maxidsub+",'"+name+"','"+description+"','"+date.toString()+"',"+parent.id+");");
+                    newsubtask=new Subtask(name,description,date,maxidsub,parent);
+                }else{
+                    newsubtask=new Subtask(name,description,date,id,parent);
                 }
-                Subtask newsubtask=new Subtask(name,description,date,maxidsub,parent);
+
                 if (parent.child == null){
                     parent.child=newsubtask;
                 }else {

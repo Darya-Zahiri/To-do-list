@@ -67,7 +67,7 @@ public class Subtask {
             }
         }
         if (Session.getSession().currentSubtask==null){
-            if (model.Subtask.addSubtask(name.getText(),description.getText(),deadline.getValue(),parent,0)){
+            if (model.Subtask.addSubtask(name.getText(),description.getText(),deadline.getValue(),parent,-1,0)){
                 error.setOpacity(0);
                 result.setText("succesful");
                 result.setOpacity(0.45);
@@ -80,9 +80,14 @@ public class Subtask {
 
             if (Session.getSession().currentSubtask.setParent(parent)){
                 try {
-                    System.out.println("edit ok id="+Session.getSession().currentSubtask.getId());
-                    Session.database.executeQueryWithoutResult("update subtask set name='"+name.getText()+"', description='"+description.getText()+"' , date='"+deadline.getValue().toString()+"', idtask="+parent.getId()+" where id="+Session.getSession().currentSubtask.getId()+";");
-
+                    System.out.println("id="+Session.getSession().currentSubtask.getId());
+                    System.out.println("name="+name.getText());
+                    System.out.println("description="+description.getText());
+                    System.out.println("date="+deadline.getValue().toString());
+                    System.out.println("taskid="+parent.getId());
+                    //Session.database.executeQueryWithoutResult("update `subtask` set `name`='"+name.getText()+"', `description`='"+description.getText()+"' , `date`='"+deadline.getValue().toString()+"' where (`id`="+Session.getSession().currentSubtask.getId()+");");
+                    Session.database.executeQueryWithoutResult("delete from subtask where id="+Session.getSession().currentSubtask.getId()+";");
+                    Session.database.executeQueryWithoutResult("insert into subtask (id,name,description,date,idtask) values ("+Session.getSession().currentSubtask.getId()+",'"+name.getText()+"','"+description.getText()+"','"+deadline.getValue().toString()+"',"+parent.getId()+");");
                     Session.getSession().currentSubtask.setName(name.getText());
                     Session.getSession().currentSubtask.setDescription(description.getText());
                     Session.getSession().currentSubtask.setDate(deadline.getValue());

@@ -57,6 +57,7 @@ public class Home {
                         Subtask.maxidsub=taskResultset.getInt("max(id)");
                     else
                         Subtask.maxidsub=-1;
+                    System.out.println("maxsubid="+Subtask.maxidsub);
                     taskResultset=Session.database.executeQueryWithResult("select * from task;");
                     if(taskResultset!=null){
                         //taskResultset.beforeFirst();
@@ -79,7 +80,7 @@ public class Home {
                                 taskname=subtaskResultset.getString("name");
                                 taskdate=subtaskResultset.getString("date");
                                 date=LocalDate.parse(taskdate);
-                                Subtask.addSubtask(taskname,description,date,task,1);
+                                Subtask.addSubtask(taskname,description,date,task,subtaskid,1);
                             }
                             Session.getSession().allTasks.add(task);
                         }

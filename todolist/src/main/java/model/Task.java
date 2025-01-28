@@ -29,12 +29,17 @@ public class Task {
         checkBox=new CheckBoxTreeItem<>(this.name);
         tree=new TreeView<>(checkBox);
     }
-    public static void addTask(String name,String description,LocalDate date){
+    public static void addTask(String name,String description,LocalDate date,int id){
+        Task newtask;
         try {
-            maxid++;
-            Task newtask=new Task(name,description,date,maxid);
-            Session.database.executeQueryWithoutResult("insert into task (id,name,description,date) values ("+maxid+",'"+name+"','"+description+"','"+date.toString()+"');");
-            Session.getSession().allTasks.add(newtask);
+            if(id==-1) {
+                maxid++;
+                Session.database.executeQueryWithoutResult("insert into task (id,name,description,date) values (" + maxid + ",'" + name + "','" + description + "','" + date.toString() + "');");
+                newtask = new Task(name, description, date, maxid);
+                Session.getSession().allTasks.add(newtask);
+            }else{
+                Session.database.executeQueryWithoutResult("update task set name='"+name+"', description='"+description+"' , date='"+date.toString()+"' where (id="+id+");");
+            }
             Session.getSession().allTasks.sort(Comparator.comparing(Task::getDate));
         } catch (SQLException e) {
             System.out.println(e.toString());

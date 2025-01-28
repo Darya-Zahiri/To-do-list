@@ -13,7 +13,7 @@ public class Session {
     public static Database database;
     private Session(){
         try {
-            database = new Database("127.0.0.1",3306,"todolist","todolist","Z@hmaz123");
+            database = new Database("127.0.0.1",3306,"todolist","root","Aminabadi1!");
             System.out.println("|||connected to database.|||");
         } catch (ClassNotFoundException e) {
             /*throw new RuntimeException(e);*/

@@ -43,8 +43,9 @@ public class Task {
         result.setDisable(true);
         result.setOpacity(0);
         if (Session.getSession().currentTask==null){
-            model.Task.addTask(name.getText(),description.getText(),deadline.getValue());
+            model.Task.addTask(name.getText(),description.getText(),deadline.getValue(),-1);
         }else {
+            model.Task.addTask(name.getText(),description.getText(),deadline.getValue(),Session.getSession().currentTask.getId());
             Session.getSession().currentTask.setName(name.getText());
             Session.getSession().currentTask.setDescription(description.getText());
             Session.getSession().currentTask.setDate(deadline.getValue());
