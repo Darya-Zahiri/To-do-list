@@ -111,7 +111,10 @@ public class Home {
             anchor.getChildren().add(tree);
             //tree.setPrefWidth(800);
             tree.setLayoutX(20+300*i);
-            //tree.setLayoutY(10+100*i);
+            if (i>2){
+                tree.setLayoutX(20+300*(i-3));
+                tree.setLayoutY(400);
+            }
         }
         //}
 
